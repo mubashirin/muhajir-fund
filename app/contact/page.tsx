@@ -1,60 +1,74 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useState, FormEvent, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPhone, faEnvelope, faLocationDot, faClock } from '@fortawesome/free-solid-svg-icons'
+import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { api } from '@/lib/api'
+import { ContactInfo } from '@/types/api'
 
 export default function Contact() {
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadContacts = async () => {
+      const response = await api.getContactInfo()
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setContactInfo(response.data)
+      }
+    }
+
+    loadContacts()
+  }, [])
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     alert('Форма отправлена!')
   }
 
   return (
-    <div className="page-content">
+    <main className="page-content">
       <div className="container">
-        <h1 className="page-title">Свяжитесь с нами</h1>
+        <h1 className="page-title">Контакты</h1>
         
         <div className="contact-info">
-          <h2>Контактная информация</h2>
+          <h2>Наши контакты</h2>
           
-          <div className="info-item">
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span>ул. Примерная, д. 123, г. Москва, 123456</span>
-          </div>
+          {contactInfo?.address && (
+            <div className="info-item">
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span>{contactInfo.address}</span>
+            </div>
+          )}
           
-          <div className="info-item">
-            <FontAwesomeIcon icon={faPhone} />
-            <span>+7 (999) 123-45-67</span>
-          </div>
+          {contactInfo?.phone && (
+            <div className="info-item">
+              <FontAwesomeIcon icon={faPhone} />
+              <span>{contactInfo.phone}</span>
+            </div>
+          )}
           
-          <div className="info-item">
-            <FontAwesomeIcon icon={faEnvelope} />
-            <span>info@example.com</span>
-          </div>
-          
-          <div className="info-item">
-            <FontAwesomeIcon icon={faClock} />
-            <span>Пн-Пт: 9:00 - 18:00</span>
-          </div>
+          {contactInfo?.email && (
+            <div className="info-item">
+              <FontAwesomeIcon icon={faEnvelope} />
+              <span>{contactInfo.email}</span>
+            </div>
+          )}
         </div>
         
         <div className="contact-form">
-          <h2>Форма обратной связи</h2>
-          <form id="contact-form" onSubmit={handleSubmit}>
+          <h2>Напишите нам</h2>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Ваше имя</label>
               <input type="text" id="name" name="name" required />
             </div>
             
             <div className="form-group">
-              <label htmlFor="email">Электронная почта</label>
+              <label htmlFor="email">Email</label>
               <input type="email" id="email" name="email" required />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="phone">Телефон</label>
-              <input type="tel" id="phone" name="phone" />
             </div>
             
             <div className="form-group">
@@ -66,6 +80,6 @@ export default function Contact() {
           </form>
         </div>
       </div>
-    </div>
+    </main>
   )
 } 

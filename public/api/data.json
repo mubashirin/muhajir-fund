@@ -1,0 +1,37 @@
+{
+  "main": {
+    "title": "Благотворительный фонд «Мухаджир»",
+    "description": "Мы помогаем нуждающимся, поддерживаем благотворительные проекты и стремимся сделать мир лучше. Присоединяйтесь к нам в этом благородном деле!"
+  },
+  "contacts": {
+    "address": "г. Москва, ул. Ленина, д. 1, офис 123",
+    "phone": "+7 (999) 123-45-67",
+    "email": "info@muhajir.org"
+  },
+  "social": [
+    {
+      "id": 1,
+      "url": "https://t.me/muhajir",
+      "icon": "telegram",
+      "title": "Telegram канал"
+    },
+    {
+      "id": 2,
+      "url": "",
+      "icon": "vk",
+      "title": "Группа ВКонтакте"
+    },
+    {
+      "id": 3,
+      "url": "https://instagram.com/muhajir",
+      "icon": "instagram",
+      "title": "Instagram"
+    },
+    {
+      "id": 4,
+      "url": "https://youtube.com/muhajir",
+      "icon": "youtube",
+      "title": "YouTube канал"
+    }
+  ]
+} 

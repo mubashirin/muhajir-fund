@@ -1,22 +1,35 @@
-import Image from "next/image";
-import Link from "next/link";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { api } from '@/lib/api';
+import { MainPageContent } from '@/types/api';
 
 export default function Home() {
+  const [content, setContent] = useState<MainPageContent | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadContent = async () => {
+      const response = await api.getMainContent();
+      if (response.error) {
+        setError(response.error);
+      } else {
+        setContent(response.data);
+      }
+    };
+
+    loadContent();
+  }, []);
+
   return (
-    <div className="page-content">
+    <main className="page-content">
       <section className="hero">
         <div className="container">
-          <h1>Благотворительный фонд Мухаджир</h1>
-          <p>
-            Это краткое описание вашей компании. Здесь вы можете рассказать о вашей деятельности, 
-            миссии и ценностях. Сделайте это описание простым и понятным для посетителей сайта.
-            Сфокусируйтесь на ключевых особенностях, которые выделяют вас среди конкурентов.
-          </p>
-          <Link href="/contact" className="cta-button">
-            Связаться с нами
-          </Link>
+          <h1>Благотворительный фонд <span>«Мухаджир»</span></h1>
+          <p>{content?.description || 'Загрузка...'}</p>
+          <a href="/contact" className="cta-button">Связаться с нами</a>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
