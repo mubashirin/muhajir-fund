@@ -1,24 +1,37 @@
 # Благотворительный фонд «Мухаджир»
 
-Веб-сайт благотворительного фонда «Мухаджир», разработанный на Next.js.
+Веб-сайт благотворительного фонда «Мухаджир», разработанный на Next.js с FastAPI бэкендом.
 
 ## Технологии
 
+### Фронтенд
 - Next.js 14
 - TypeScript
 - TailwindCSS
 - Font Awesome
-- API для динамического контента
+
+### Бэкенд
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
 
 ## Структура проекта
 
+### Фронтенд
 - `app/` - основные компоненты и страницы
-- `public/` - статические файлы и моковые данные API
+- `public/` - статические файлы
 - `types/` - TypeScript типы
 - `lib/` - утилиты и API клиент
 
+### Бэкенд
+- `api/` - FastAPI приложение
+- `models/` - модели данных
+- `schemas/` - Pydantic схемы
+- `database/` - конфигурация базы данных
+
 ## Установка
 
+### Фронтенд
 ```bash
 # Установка зависимостей
 npm install
@@ -30,13 +43,32 @@ npm run dev
 npm run build
 ```
 
-## API
+### Бэкенд
+```bash
+# Установка зависимостей
+pip install -r requirements.txt
 
-Проект использует JSON API для получения динамического контента:
+# Запуск сервера разработки
+uvicorn main:app --reload
+```
 
-- `/api/main` - контент главной страницы
-- `/api/contacts` - контактная информация
-- `/api/social` - ссылки на социальные сети
+## API Endpoints
+
+- `GET /api/main` - контент главной страницы
+- `GET /api/contacts` - контактная информация
+- `GET /api/social` - ссылки на социальные сети
+
+## Переменные окружения
+
+### Фронтенд (.env.local)
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### Бэкенд (.env)
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+```
 
 ## Лицензия
 

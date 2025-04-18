@@ -4,19 +4,21 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { 
-  faVk, 
-  faTelegram, 
-  faInstagram, 
-  faYoutube 
+  faFacebook,
+  faInstagram,
+  faTelegram,
+  faVk,
+  faYoutube
 } from '@fortawesome/free-brands-svg-icons';
 import { api } from '@/lib/api';
 import { ContactInfo, SocialLink } from '@/types/api';
 
-const iconMap = {
-  'vk': faVk,
-  'telegram': faTelegram,
-  'instagram': faInstagram,
-  'youtube': faYoutube
+const SOCIAL_ICONS = {
+  facebook: faFacebook,
+  instagram: faInstagram,
+  telegram: faTelegram,
+  vk: faVk,
+  youtube: faYoutube
 };
 
 export default function Footer() {
@@ -71,8 +73,8 @@ export default function Footer() {
               <h3>Мы в социальных сетях</h3>
               <div className="social-icons">
                 {socialLinks.map(link => {
-                  const icon = iconMap[link.icon as keyof typeof iconMap];
-                  if (!icon || !link.url) return null;
+                  const icon = SOCIAL_ICONS[link.icon as keyof typeof SOCIAL_ICONS];
+                  if (!icon) return null;
                   
                   return (
                     <a 
