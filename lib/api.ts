@@ -1,30 +1,65 @@
-import { ContactInfo, MainPageContent, SocialLink, ApiResponse } from '../types/api';
+import { ContactInfo, MainContent } from '../types/api';
+
+interface ApiResponse<T> {
+  data: T | null;
+  error?: string;
+}
 
 class ApiClient {
+  private baseUrl: string;
+
+  constructor() {
+    this.baseUrl = 'http://127.0.0.1:8000';
+  }
+
   private async fetch<T>(endpoint: string): Promise<ApiResponse<T>> {
     try {
-      const response = await fetch(`/api/data.json`);
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'include'
+      });
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      return { data: data[endpoint] };
+      return { data };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('API Error:', message);
       return { data: null as T, error: message };
     }
   }
 
-  async getMainContent(): Promise<ApiResponse<MainPageContent>> {
-    return this.fetch<MainPageContent>('main');
-  }
-
   async getContactInfo(): Promise<ApiResponse<ContactInfo>> {
-    return this.fetch<ContactInfo>('contacts');
+    const response = await this.fetch<any>('/data/');
+    if (response.data) {
+      return {
+        data: {
+          address: response.data.address || '',
+          phone: response.data.phone || '',
+          email: response.data.email || ''
+        }
+      };
+    }
+    return { data: null, error: 'Failed to load contact info' };
   }
 
-  async getSocialLinks(): Promise<ApiResponse<SocialLink[]>> {
-    return this.fetch<SocialLink[]>('social');
+  async getMainContent(): Promise<ApiResponse<MainContent>> {
+    const response = await this.fetch<any>('/data/');
+    if (response.data) {
+      return {
+        data: {
+          description: response.data.description || ''
+        }
+      };
+    }
+    return { data: null, error: 'Failed to load main content' };
   }
 }
 

@@ -10,31 +10,16 @@ import {
   faYoutube 
 } from '@fortawesome/free-brands-svg-icons';
 import { api } from '@/lib/api';
-import { ContactInfo, SocialLink } from '@/types/api';
-
-const SOCIAL_ICONS: { [key: string]: any } = {
-  'vk': faVk,
-  'telegram': faTelegram,
-  'instagram': faInstagram,
-  'youtube': faYoutube
-};
+import { ContactInfo } from '@/types/api';
 
 export default function Footer() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
-  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const [contactResponse, socialResponse] = await Promise.all([
-        api.getContactInfo(),
-        api.getSocialLinks()
-      ]);
-
-      if (contactResponse.data) {
-        setContactInfo(contactResponse.data);
-      }
-      if (socialResponse.data) {
-        setSocialLinks(socialResponse.data);
+      const response = await api.getContactInfo();
+      if (response.data) {
+        setContactInfo(response.data);
       }
     };
 
@@ -66,30 +51,47 @@ export default function Footer() {
               </div>
             )}
           </div>
-          {socialLinks.length > 0 && (
-            <div className="footer-info">
-              <h3>Мы в социальных сетях</h3>
-              <div className="social-icons">
-                {socialLinks.map(link => {
-                  const icon = SOCIAL_ICONS[link.icon];
-                  if (!icon || !link.url) return null;
-                  
-                  return (
-                    <a 
-                      key={link.id} 
-                      href={link.url} 
-                      className="social-icon" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      title={link.title}
-                    >
-                      <FontAwesomeIcon icon={icon} />
-                    </a>
-                  );
-                })}
-              </div>
+          <div className="footer-info">
+            <h3>Мы в социальных сетях</h3>
+            <div className="social-icons">
+              <a 
+                href="https://vk.com/muhajir" 
+                className="social-icon" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Группа ВКонтакте"
+              >
+                <FontAwesomeIcon icon={faVk} />
+              </a>
+              <a 
+                href="https://t.me/muhajir" 
+                className="social-icon" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Telegram канал"
+              >
+                <FontAwesomeIcon icon={faTelegram} />
+              </a>
+              <a 
+                href="https://instagram.com/muhajir" 
+                className="social-icon" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Instagram"
+              >
+                <FontAwesomeIcon icon={faInstagram} />
+              </a>
+              <a 
+                href="https://youtube.com/muhajir" 
+                className="social-icon" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="YouTube канал"
+              >
+                <FontAwesomeIcon icon={faYoutube} />
+              </a>
             </div>
-          )}
+          </div>
         </div>
         <div className="copyright">
           © {new Date().getFullYear()} Благотворительный фонд «Мухаджир». Все права защищены.

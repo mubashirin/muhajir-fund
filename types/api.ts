@@ -11,9 +11,17 @@ export interface ContactInfo {
   email: string;
 }
 
+export interface MainContent {
+  description: string;
+}
+
 export interface MainPageContent {
   title: string;
   description: string;
+  address: string;
+  phone: string;
+  email: string;
+  social: SocialLink[];
 }
 
 export interface ApiResponse<T> {
