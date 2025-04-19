@@ -1,75 +1,36 @@
-# Благотворительный фонд «Мухаджир»
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Веб-сайт благотворительного фонда «Мухаджир», разработанный на Next.js с FastAPI бэкендом.
+## Getting Started
 
-## Технологии
+First, run the development server:
 
-### Фронтенд
-- Next.js 14
-- TypeScript
-- TailwindCSS
-- Font Awesome
-
-### Бэкенд
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-
-## Структура проекта
-
-### Фронтенд
-- `app/` - основные компоненты и страницы
-- `public/` - статические файлы
-- `types/` - TypeScript типы
-- `lib/` - утилиты и API клиент
-
-### Бэкенд
-- `api/` - FastAPI приложение
-- `models/` - модели данных
-- `schemas/` - Pydantic схемы
-- `database/` - конфигурация базы данных
-
-## Установка
-
-### Фронтенд
 ```bash
-# Установка зависимостей
-npm install
-
-# Запуск в режиме разработки
 npm run dev
-
-# Сборка для продакшена
-npm run build
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Бэкенд
-```bash
-# Установка зависимостей
-pip install -r requirements.txt
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Запуск сервера разработки
-uvicorn main:app --reload
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## API Endpoints
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- `GET /api/main` - контент главной страницы
-- `GET /api/contacts` - контактная информация
-- `GET /api/social` - ссылки на социальные сети
+## Learn More
 
-## Переменные окружения
+To learn more about Next.js, take a look at the following resources:
 
-### Фронтенд (.env.local)
-```
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### Бэкенд (.env)
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Лицензия
+## Deploy on Vercel
 
-© 2024 Благотворительный фонд «Мухаджир». Все права защищены.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

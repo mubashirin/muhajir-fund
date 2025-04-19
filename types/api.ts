@@ -16,17 +16,6 @@ export interface MainPageContent {
   description: string;
 }
 
-export interface ApiData {
-  title: string;
-  description: string;
-  address: string;
-  phone: string;
-  email: string;
-  social: {
-    [key: string]: string;
-  };
-}
-
 export interface ApiResponse<T> {
   data: T | null;
   error?: string;
