@@ -12,7 +12,7 @@ import {
 import { api } from '@/lib/api';
 import { ContactInfo, SocialLink } from '@/types/api';
 
-const iconMap = {
+const SOCIAL_ICONS: { [key: string]: any } = {
   'vk': faVk,
   'telegram': faTelegram,
   'instagram': faInstagram,
@@ -71,7 +71,7 @@ export default function Footer() {
               <h3>Мы в социальных сетях</h3>
               <div className="social-icons">
                 {socialLinks.map(link => {
-                  const icon = iconMap[link.icon as keyof typeof iconMap];
+                  const icon = SOCIAL_ICONS[link.icon];
                   if (!icon || !link.url) return null;
                   
                   return (
