@@ -14,12 +14,19 @@ import { ContactInfo } from '@/types/api';
 
 export default function Footer() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      const response = await api.getContactInfo();
-      if (response.data) {
-        setContactInfo(response.data);
+      try {
+        const response = await api.getContactInfo();
+        if (response.error) {
+          setError(response.error);
+        } else if (response.data) {
+          setContactInfo(response.data);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке данных');
       }
     };
 
@@ -32,23 +39,29 @@ export default function Footer() {
         <div className="footer-content">
           <div className="footer-info">
             <h3>Контактная информация</h3>
-            {contactInfo?.address && (
-              <div className="contact-item">
-                <FontAwesomeIcon icon={faMapMarkerAlt} />
-                <span>{contactInfo.address}</span>
-              </div>
-            )}
-            {contactInfo?.phone && (
-              <div className="contact-item">
-                <FontAwesomeIcon icon={faPhone} />
-                <span>{contactInfo.phone}</span>
-              </div>
-            )}
-            {contactInfo?.email && (
-              <div className="contact-item">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <span>{contactInfo.email}</span>
-              </div>
+            {error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <>
+                {contactInfo?.address && (
+                  <div className="contact-item">
+                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                    <span>{contactInfo.address}</span>
+                  </div>
+                )}
+                {contactInfo?.phone && (
+                  <div className="contact-item">
+                    <FontAwesomeIcon icon={faPhone} />
+                    <span>{contactInfo.phone}</span>
+                  </div>
+                )}
+                {contactInfo?.email && (
+                  <div className="contact-item">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    <span>{contactInfo.email}</span>
+                  </div>
+                )}
+              </>
             )}
           </div>
           <div className="footer-info">

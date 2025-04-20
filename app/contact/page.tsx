@@ -9,14 +9,21 @@ import { ContactInfo } from '@/types/api'
 export default function Contact() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const loadContacts = async () => {
-      const response = await api.getContactInfo()
-      if (response.error) {
-        setError(response.error)
-      } else {
-        setContactInfo(response.data)
+      try {
+        const response = await api.getContactInfo()
+        if (response.error) {
+          setError(response.error)
+        } else if (response.data) {
+          setContactInfo(response.data)
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке данных')
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -36,25 +43,37 @@ export default function Contact() {
         <div className="contact-info">
           <h2>Наши контакты</h2>
           
-          {contactInfo?.address && (
-            <div className="info-item">
-              <FontAwesomeIcon icon={faLocationDot} />
-              <span>{contactInfo.address}</span>
+          {isLoading ? (
+            <div className="space-y-3">
+              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
+              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
+              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
             </div>
-          )}
-          
-          {contactInfo?.phone && (
-            <div className="info-item">
-              <FontAwesomeIcon icon={faPhone} />
-              <span>{contactInfo.phone}</span>
-            </div>
-          )}
-          
-          {contactInfo?.email && (
-            <div className="info-item">
-              <FontAwesomeIcon icon={faEnvelope} />
-              <span>{contactInfo.email}</span>
-            </div>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <>
+              {contactInfo?.address && (
+                <div className="info-item">
+                  <FontAwesomeIcon icon={faLocationDot} />
+                  <span>{contactInfo.address}</span>
+                </div>
+              )}
+              
+              {contactInfo?.phone && (
+                <div className="info-item">
+                  <FontAwesomeIcon icon={faPhone} />
+                  <span>{contactInfo.phone}</span>
+                </div>
+              )}
+              
+              {contactInfo?.email && (
+                <div className="info-item">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                  <span>{contactInfo.email}</span>
+                </div>
+              )}
+            </>
           )}
         </div>
         

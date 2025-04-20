@@ -8,14 +8,19 @@ import Skeleton from './components/Skeleton';
 export default function Home() {
   const [content, setContent] = useState<MainContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadContent = async () => {
       try {
         const response = await api.getMainContent();
-        if (response.data) {
+        if (response.error) {
+          setError(response.error);
+        } else if (response.data) {
           setContent(response.data);
         }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке данных');
       } finally {
         setIsLoading(false);
       }
@@ -37,6 +42,8 @@ export default function Home() {
               <Skeleton height="24px" width="85%" style={{ opacity: 0.5 }} />
               <Skeleton height="24px" width="70%" style={{ opacity: 0.3 }} />
             </div>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
           ) : (
             <p>{content?.description || 'Мы помогаем нуждающимся, поддерживаем благотворительные проекты и стремимся сделать мир лучше. Присоединяйтесь к нам в этом благородном деле!'}</p>
           )}
