@@ -36,4 +36,4 @@ export interface FundInfo {
 }
 
 export type MainContent = Pick<FundInfo, 'name' | 'description'>;
-export type ContactInfo = Pick<FundInfo, 'address' | 'phone' | 'email'>; 
+export type ContactInfo = Pick<FundInfo, 'address' | 'phone' | 'email' | 'social_links'>; 

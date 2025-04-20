@@ -1,101 +1,113 @@
 'use client'
 
-import { useState, FormEvent, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons'
-import { api } from '@/lib/api'
-import { ContactInfo } from '@/types/api'
+import { useState } from 'react'
 
 export default function Contact() {
-  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [status, setStatus] = useState<{
+    type: 'success' | 'error' | null
+    message: string
+  }>({ type: null, message: '' })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    const loadContacts = async () => {
-      try {
-        const response = await api.getContactInfo()
-        if (response.error) {
-          setError(response.error)
-        } else if (response.data) {
-          setContactInfo(response.data)
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке данных')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadContacts()
-  }, [])
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    alert('Форма отправлена!')
+    setIsSubmitting(true)
+    setStatus({ type: null, message: '' })
+
+    try {
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Ошибка при отправке сообщения')
+      }
+
+      setStatus({
+        type: 'success',
+        message: 'Сообщение успешно отправлено!'
+      })
+      setFormData({ name: '', email: '', message: '' })
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Произошла ошибка'
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   return (
     <main className="page-content">
       <div className="container">
-        <h1 className="page-title">Контакты</h1>
-        
-        <div className="contact-info">
-          <h2>Наши контакты</h2>
-          
-          {isLoading ? (
-            <div className="space-y-3">
-              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
-              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
-              <div className="animate-pulse bg-gray-200 rounded h-12"></div>
-            </div>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <>
-              {contactInfo?.address && (
-                <div className="info-item">
-                  <FontAwesomeIcon icon={faLocationDot} />
-                  <span>{contactInfo.address}</span>
-                </div>
-              )}
-              
-              {contactInfo?.phone && (
-                <div className="info-item">
-                  <FontAwesomeIcon icon={faPhone} />
-                  <span>{contactInfo.phone}</span>
-                </div>
-              )}
-              
-              {contactInfo?.email && (
-                <div className="info-item">
-                  <FontAwesomeIcon icon={faEnvelope} />
-                  <span>{contactInfo.email}</span>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-        
         <div className="contact-form">
-          <h2>Напишите нам</h2>
+          <h1 className="contact-title">Напишите нам</h1>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Ваше имя</label>
-              <input type="text" id="name" name="name" required />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
             
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" name="email" required />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
             </div>
             
             <div className="form-group">
               <label htmlFor="message">Сообщение</label>
-              <textarea id="message" name="message" required></textarea>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+              />
             </div>
+
+            {status.type && (
+              <div className={`alert ${status.type === 'success' ? 'alert-success' : 'alert-error'}`}>
+                {status.message}
+              </div>
+            )}
             
-            <button type="submit">Отправить</button>
+            <button 
+              type="submit" 
+              className="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Отправка...' : 'Отправить'}
+            </button>
           </form>
         </div>
       </div>

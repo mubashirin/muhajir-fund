@@ -9,7 +9,6 @@ import {
   faInstagram, 
   faYoutube 
 } from '@fortawesome/free-brands-svg-icons';
-import { api } from '@/lib/api';
 import { ContactInfo } from '@/types/api';
 
 export default function Footer() {
@@ -17,21 +16,53 @@ export default function Footer() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
+    const fetchContactInfo = async () => {
       try {
-        const response = await api.getContactInfo();
-        if (response.error) {
-          setError(response.error);
-        } else if (response.data) {
-          setContactInfo(response.data);
+        const response = await fetch('http://127.0.0.1:8000/api/v1/fund/info', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch contact info: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('API Data:', data);
+        
+        if (data) {
+          setContactInfo(data);
+        } else {
+          console.error('Invalid data structure:', data);
+          setError('Неверный формат данных');
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке данных');
+        console.error('Error fetching contact info:', err);
+        setError(err instanceof Error ? err.message : 'Произошла ошибка');
       }
     };
 
-    loadData();
+    fetchContactInfo();
   }, []);
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform.toLowerCase()) {
+      case 'vk':
+        return faVk;
+      case 'telegram':
+        return faTelegram;
+      case 'instagram':
+        return faInstagram;
+      case 'youtube':
+        return faYoutube;
+      default:
+        return null;
+    }
+  };
 
   return (
     <footer>
@@ -41,68 +72,59 @@ export default function Footer() {
             <h3>Контактная информация</h3>
             {error ? (
               <p className="text-red-500">{error}</p>
-            ) : (
+            ) : contactInfo ? (
               <>
-                {contactInfo?.address && (
-                  <div className="contact-item">
-                    <FontAwesomeIcon icon={faMapMarkerAlt} />
-                    <span>{contactInfo.address}</span>
-                  </div>
-                )}
-                {contactInfo?.phone && (
-                  <div className="contact-item">
-                    <FontAwesomeIcon icon={faPhone} />
-                    <span>{contactInfo.phone}</span>
-                  </div>
-                )}
-                {contactInfo?.email && (
-                  <div className="contact-item">
-                    <FontAwesomeIcon icon={faEnvelope} />
-                    <span>{contactInfo.email}</span>
-                  </div>
-                )}
+                <div className="contact-item">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} />
+                  <span>{contactInfo.address}</span>
+                </div>
+                <div className="contact-item">
+                  <FontAwesomeIcon icon={faPhone} />
+                  <span>{contactInfo.phone}</span>
+                </div>
+                <div className="contact-item">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                  <span>{contactInfo.email}</span>
+                </div>
               </>
+            ) : (
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              </div>
             )}
           </div>
           <div className="footer-info">
             <h3>Мы в социальных сетях</h3>
             <div className="social-icons">
-              <a 
-                href="https://vk.com/muhajir" 
-                className="social-icon" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="Группа ВКонтакте"
-              >
-                <FontAwesomeIcon icon={faVk} />
-              </a>
-              <a 
-                href="https://t.me/muhajir" 
-                className="social-icon" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="Telegram канал"
-              >
-                <FontAwesomeIcon icon={faTelegram} />
-              </a>
-              <a 
-                href="https://instagram.com/muhajir" 
-                className="social-icon" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="Instagram"
-              >
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
-              <a 
-                href="https://youtube.com/muhajir" 
-                className="social-icon" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="YouTube канал"
-              >
-                <FontAwesomeIcon icon={faYoutube} />
-              </a>
+              {error ? (
+                <p className="text-red-500">{error}</p>
+              ) : contactInfo?.social_links ? (
+                contactInfo.social_links.map((link) => {
+                  const icon = getSocialIcon(link.platform);
+                  if (!icon) return null;
+                  
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      className="social-icon"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`${link.platform}`}
+                    >
+                      <FontAwesomeIcon icon={icon} />
+                    </a>
+                  );
+                })
+              ) : (
+                <div className="animate-pulse space-y-3">
+                  <div className="h-8 bg-gray-200 rounded w-8"></div>
+                  <div className="h-8 bg-gray-200 rounded w-8"></div>
+                  <div className="h-8 bg-gray-200 rounded w-8"></div>
+                </div>
+              )}
             </div>
           </div>
         </div>
