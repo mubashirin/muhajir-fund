@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from 'mongoose';
+import { Schema, model, models, Document, Model } from 'mongoose';
 
 export interface IFeedback extends Document {
   name: string;
@@ -44,7 +44,8 @@ feedbackSchema.pre('save', async function(next) {
   const RATE_LIMIT_MINUTES = 30;
   
   if (this.isNew) {
-    const lastMessage = await this.constructor.findOne({ 
+    const Model = this.constructor as Model<IFeedback>;
+    const lastMessage = await Model.findOne({ 
       email: this.email 
     }).sort({ createdAt: -1 });
 
