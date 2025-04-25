@@ -20,7 +20,7 @@ export default function Contact() {
     setStatus({ type: null, message: '' })
 
     try {
-      const response = await fetch('/api/feedback', {
+      const response = await fetch('/api/v1/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
