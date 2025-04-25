@@ -18,13 +18,10 @@ export default function Footer() {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/v1/fund/info', {
-          method: 'GET',
+        const response = await fetch('/api/v1/fund/info', {
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
           },
-          mode: 'cors',
         });
         
         if (!response.ok) {
