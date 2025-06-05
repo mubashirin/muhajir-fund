@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarkerAlt, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faMapMarkerAlt, faPhone, faEnvelope, faWallet, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { 
   faVk, 
   faTelegram, 
@@ -14,6 +14,7 @@ import { ContactInfo } from '@/types/api';
 export default function Footer() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -58,6 +59,19 @@ export default function Footer() {
         return faYoutube;
       default:
         return null;
+    }
+  };
+
+  const handleCopyAddress = async () => {
+    if (contactInfo?.trc20_addresses && contactInfo.trc20_addresses.length > 0) {
+      try {
+        await navigator.clipboard.writeText(contactInfo.trc20_addresses[0].address);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Сбросить состояние через 2 секунды
+      } catch (err) {
+        console.error('Failed to copy address:', err);
+        // Можно добавить обработку ошибки копирования, например, показать сообщение пользователю
+      }
     }
   };
 
@@ -123,6 +137,25 @@ export default function Footer() {
                 </div>
               )}
             </div>
+          </div>
+          <div className="footer-info trc20-address-block">
+            <h3 className="text-center">Поддержи фонд (TRC20 USDT)</h3>
+            {error ? (
+              <p className="text-red-500">{error}</p>
+            ) : contactInfo?.trc20_addresses && contactInfo.trc20_addresses.length > 0 ? (
+              <div 
+                className="contact-item justify-center cursor-pointer hover:underline text-center"
+                onClick={handleCopyAddress}
+                title="Нажмите для копирования адреса"
+              >
+                <FontAwesomeIcon icon={copied ? faCheckCircle : faWallet} />
+                <span>{contactInfo.trc20_addresses[0].address}</span>
+              </div>
+            ) : (
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
+            )}
           </div>
         </div>
         <div className="copyright">

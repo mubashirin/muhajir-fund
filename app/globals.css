@@ -383,6 +383,26 @@ footer {
   border-radius: 8px;
 }
 
+.trc20-address-block {
+  flex-basis: 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.trc20-address-block > * {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.trc20-address-block h3,
+.trc20-address-block .contact-item span {
+  text-align: center;
+  display: block;
+}
+
 .footer-info h3 {
   margin-bottom: 1rem;
   font-size: 1.25rem;
@@ -524,6 +544,17 @@ footer {
 
   .social-icons {
     margin-top: 10px;
+  }
+
+  /* Мобильные стили для блока TRC20 */
+  .trc20-address-block {
+    align-items: flex-start; /* Выравниваем элементы по левому краю */
+    text-align: left; /* Выравниваем текст по левому краю */
+  }
+
+  .trc20-address-block > * {
+    margin-left: unset !important; /* Отменяем автоматические маржины */
+    margin-right: unset !important;
   }
 }
 

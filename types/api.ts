@@ -7,6 +7,14 @@ export interface SocialLink {
   updated_at: string | null;
 }
 
+export interface TRC20Address {
+  address: string;
+  fund_id: number;
+  id: number;
+  created_at: string;
+  updated_at: string | null;
+}
+
 export interface MainPageContent {
   title: string;
   description: string;
@@ -33,7 +41,8 @@ export interface FundInfo {
   updated_at: string | null;
   social_links: SocialLink[];
   bank_details: any[];
+  trc20_addresses: TRC20Address[];
 }
 
 export type MainContent = Pick<FundInfo, 'name' | 'description'>;
-export type ContactInfo = Pick<FundInfo, 'address' | 'phone' | 'email' | 'social_links'>; 
+export type ContactInfo = Pick<FundInfo, 'address' | 'phone' | 'email' | 'social_links' | 'trc20_addresses'>; 
