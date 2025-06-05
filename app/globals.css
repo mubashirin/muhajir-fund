@@ -151,6 +151,20 @@ header {
   color: #555;
 }
 
+/* Стили для контента, рендеримого ReactMarkdown в секции Hero */
+.hero .container p {
+  margin-bottom: 1rem; /* Отступ после каждого абзаца */
+}
+
+.hero .container blockquote {
+  margin: 20px 0;
+  padding-right: 20px;
+  border-right: 4px solid var(--main-green);
+  color: var(--gray);
+  font-style: italic;
+  direction: rtl;
+}
+
 .cta-button {
   display: inline-block;
   background-color: var(--main-green);
