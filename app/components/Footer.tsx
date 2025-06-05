@@ -15,6 +15,7 @@ export default function Footer() {
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -47,6 +48,20 @@ export default function Footer() {
     fetchContactInfo();
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
       case 'vk':
@@ -62,15 +77,20 @@ export default function Footer() {
     }
   };
 
+  const displayedAddress = contactInfo?.trc20_addresses?.[0]?.address
+    ? windowWidth < 768
+      ? `${contactInfo.trc20_addresses[0].address.substring(0, 8)}...${contactInfo.trc20_addresses[0].address.substring(contactInfo.trc20_addresses[0].address.length - 8)}`
+      : contactInfo.trc20_addresses[0].address
+    : '';
+
   const handleCopyAddress = async () => {
     if (contactInfo?.trc20_addresses && contactInfo.trc20_addresses.length > 0) {
       try {
         await navigator.clipboard.writeText(contactInfo.trc20_addresses[0].address);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Сбросить состояние через 2 секунды
+        setTimeout(() => setCopied(false), 2000);
       } catch (err) {
         console.error('Failed to copy address:', err);
-        // Можно добавить обработку ошибки копирования, например, показать сообщение пользователю
       }
     }
   };
@@ -149,7 +169,7 @@ export default function Footer() {
                 title="Нажмите для копирования адреса"
               >
                 <FontAwesomeIcon icon={copied ? faCheckCircle : faWallet} />
-                <span>{contactInfo.trc20_addresses[0].address}</span>
+                <span>{displayedAddress}</span>
               </div>
             ) : (
               <div className="animate-pulse space-y-3">
