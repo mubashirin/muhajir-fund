@@ -153,56 +153,71 @@ header {
 
 /* Стили для контента, рендеримого ReactMarkdown в секции Hero */
 .hero .container {
-  text-align: left; /* Выравнивание всего контента контейнера по левому краю */
+  font-size: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.hero .container > * {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero .container p {
-  margin-bottom: 1rem; /* Отступ после каждого абзаца */
+  margin-bottom: 1rem;
 }
 
-.hero .container li p {
-  margin: 0 !important; /* Убираем отступы у параграфов внутри элементов списка */
+.hero .container ul,
+.hero .container ol {
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+  list-style-type: disc;
+  list-style-position: outside;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.hero .container ul {
-  list-style-type: disc; /* Маркеры для списка */
-  margin-left: 0 !important; /* Удаляем margin-left, чтобы ul выравнивался с текстом */
-  padding-left: 250px !important; /* Отступ для элементов списка и маркеров */
-  list-style-position: outside !important; /* Маркеры снаружи текстового блока */
-  margin-bottom: 1rem; /* Отступ после списка */
-  font-size: 20px !important; /* Устанавливаем размер шрифта для списка */
-}
-
+/* Элементы списка наследуют размер шрифта от родителя */
 .hero .container li {
-  margin-bottom: 0.5rem; /* Отступ после каждого элемента списка */
-  font-size: 20px !important; /* Устанавливаем размер шрифта для элементов списка */
+  font-size: inherit;
+  line-height: inherit;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+/* Убираем отступы у параграфов внутри элементов списка */
+.hero .container li p {
+  margin: 0 !important;
 }
 
 .hero .container strong {
-  font-weight: bold !important; /* Делаем текст жирным */
+  font-weight: bold !important;
+  color: var(--dark-gray);
 }
 
 .hero .container blockquote {
-  margin: 35px auto;              /* Центрируем по горизонтали */
-  padding-left: 12px;             /* Отступ текста от зелёной линии */
+  margin: 35px auto;
+  padding-left: 20px;
   border-left: 4px solid var(--main-green);
-  max-width: 800px;               /* Ограничиваем ширину цитаты */
+  max-width: 800px;
   font-style: italic;
-  color: var(--gray);
+  color: #666;
 }
 
 .hero .container blockquote p {
-  padding-left: 0 !important;  /* убираем отступ от родительских reset-стилей */
+  padding-left: 0 !important;
   margin-left: 0 !important;
 }
 
 .cta-button-wrapper {
-  text-align: center; /* Центрируем содержимое обертки */
-  margin-top: 40px; /* Отступ сверху для обертки */
+  text-align: center;
+  margin-top: 40px;
 }
 
 .cta-button {
-  display: inline-block; /* Возвращаем inline-block для сохранения размера */
+  display: inline-block;
   background-color: var(--main-green);
   color: var(--white);
   padding: 15px 35px;
@@ -211,7 +226,7 @@ header {
   border-radius: 4px;
   transition: background-color 0.3s;
   font-weight: 600;
-  margin: 0; /* Удаляем отступы, центрирование будет от родителя */
+  margin: 0;
 }
 
 .cta-button:hover {
@@ -566,6 +581,26 @@ footer {
     padding: 0 20px;
   }
 
+  /* Мобильные стили для hero контента */
+  .hero .container {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .hero .container > * {
+    max-width: 100%;
+  }
+
+  .hero .container ul,
+  .hero .container ol {
+    padding-left: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .hero .container p {
+    margin-bottom: 1rem;
+  }
+
   .page-title {
     font-size: 28px;
     margin-top: 40px;
@@ -599,12 +634,12 @@ footer {
 
   /* Мобильные стили для блока TRC20 */
   .trc20-address-block {
-    align-items: flex-start; /* Выравниваем элементы по левому краю */
-    text-align: left; /* Выравниваем текст по левому краю */
+    align-items: flex-start;
+    text-align: left;
   }
 
   .trc20-address-block > * {
-    margin-left: unset !important; /* Отменяем автоматические маржины */
+    margin-left: unset !important;
     margin-right: unset !important;
   }
 }
@@ -621,6 +656,16 @@ footer {
 
   .hero h1 {
     font-size: 24px;
+  }
+
+  .hero .container {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+  
+  .hero .container ul,
+  .hero .container ol {
+    padding-left: 1.25rem;
   }
 
   .cta-button {
