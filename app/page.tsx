@@ -63,7 +63,9 @@ export default function Home() {
               })()}
             </ReactMarkdown>
           )}
-          <a href="/contact" className="cta-button">Связаться с нами</a>
+          <div className="cta-button-wrapper">
+            <a href="/contact" className="cta-button">Связаться с нами</a>
+          </div>
         </div>
       </section>
     </main>

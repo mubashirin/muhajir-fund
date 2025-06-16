@@ -125,7 +125,6 @@ header {
 /* Hero Section */
 .hero {
   padding: 100px 0 60px;
-  text-align: center;
   background-color: var(--white);
   margin-bottom: 40px;
 }
@@ -137,6 +136,7 @@ header {
   margin-bottom: 25px;
   font-weight: 700;
   line-height: 1.2;
+  text-align: center;
 }
 
 .hero h1 span {
@@ -152,21 +152,57 @@ header {
 }
 
 /* Стили для контента, рендеримого ReactMarkdown в секции Hero */
+.hero .container {
+  text-align: left; /* Выравнивание всего контента контейнера по левому краю */
+}
+
 .hero .container p {
   margin-bottom: 1rem; /* Отступ после каждого абзаца */
 }
 
+.hero .container li p {
+  margin: 0 !important; /* Убираем отступы у параграфов внутри элементов списка */
+}
+
+.hero .container ul {
+  list-style-type: disc; /* Маркеры для списка */
+  margin-left: 0 !important; /* Удаляем margin-left, чтобы ul выравнивался с текстом */
+  padding-left: 250px !important; /* Отступ для элементов списка и маркеров */
+  list-style-position: outside !important; /* Маркеры снаружи текстового блока */
+  margin-bottom: 1rem; /* Отступ после списка */
+  font-size: 20px !important; /* Устанавливаем размер шрифта для списка */
+}
+
+.hero .container li {
+  margin-bottom: 0.5rem; /* Отступ после каждого элемента списка */
+  font-size: 20px !important; /* Устанавливаем размер шрифта для элементов списка */
+}
+
+.hero .container strong {
+  font-weight: bold !important; /* Делаем текст жирным */
+}
+
 .hero .container blockquote {
-  margin: 20px 0;
-  padding-right: 20px;
-  border-right: 4px solid var(--main-green);
-  color: var(--gray);
+  margin: 35px auto;              /* Центрируем по горизонтали */
+  padding-left: 12px;             /* Отступ текста от зелёной линии */
+  border-left: 4px solid var(--main-green);
+  max-width: 800px;               /* Ограничиваем ширину цитаты */
   font-style: italic;
-  direction: rtl;
+  color: var(--gray);
+}
+
+.hero .container blockquote p {
+  padding-left: 0 !important;  /* убираем отступ от родительских reset-стилей */
+  margin-left: 0 !important;
+}
+
+.cta-button-wrapper {
+  text-align: center; /* Центрируем содержимое обертки */
+  margin-top: 40px; /* Отступ сверху для обертки */
 }
 
 .cta-button {
-  display: inline-block;
+  display: inline-block; /* Возвращаем inline-block для сохранения размера */
   background-color: var(--main-green);
   color: var(--white);
   padding: 15px 35px;
@@ -175,6 +211,7 @@ header {
   border-radius: 4px;
   transition: background-color 0.3s;
   font-weight: 600;
+  margin: 0; /* Удаляем отступы, центрирование будет от родителя */
 }
 
 .cta-button:hover {
